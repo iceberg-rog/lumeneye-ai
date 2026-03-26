@@ -47,6 +47,57 @@ The main application is a local desktop app. You can:
 - Review saved sample thumbnails for the selected model
 - Monitor live matches, detector status, and event history
 
+## Model Registration Guide
+
+![LumenEye AI model registration guide](docs/model-registration-guide.svg)
+
+### Quick Start
+
+1. Open the desktop app and go to `Model Studio`.
+2. Fill in the model details:
+   - `Model Name`: a unique internal ID such as `blue_bic_pen`
+   - `Label`: a human-readable name such as `Blue Bic Pen`
+   - `Category`: the real object type such as `pen`, `phone`, `bottle`, or `box`
+   - `Expected Color`: optional, but useful for rejecting obvious mismatches
+3. Draw a tight ROI around the object in the live preview.
+4. Save the first sample with `Add Selection Sample`.
+5. Confirm that the `Saved Sample Confirmation` preview looks correct.
+6. Add more samples with:
+   - `Add Selection Sample` for precise manual crops
+   - `Add Auto Sample` for detector-assisted capture
+   - `Guided Capture x4` for quick multi-angle collection
+
+### What Good Registration Looks Like
+
+- Use a real object category, not a placeholder like `test`.
+- Capture 4 to 8 samples of the same object.
+- Include different angles, slight rotation, and small distance changes.
+- Keep the ROI tight so the object fills most of the selection.
+- Re-capture any sample that includes too much background or cuts off part of the object.
+
+### Common Mistakes
+
+- Using `test` or another non-object word as the category
+- Capturing only one or two samples
+- Drawing a loose ROI with too much background
+- Registering the object from one angle only and expecting it to work from every angle later
+
+### Recommended Example
+
+For a real phone registration:
+
+- `Model Name`: `iphone16_white`
+- `Label`: `iPhone 16 White`
+- `Category`: `phone`
+- `Expected Color`: `white`
+
+For a pen:
+
+- `Model Name`: `blue_bic_pen`
+- `Label`: `Blue Bic Pen`
+- `Category`: `pen`
+- `Expected Color`: `blue`
+
 ## Installation
 
 ```bash

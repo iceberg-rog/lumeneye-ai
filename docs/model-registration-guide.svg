@@ -1,0 +1,128 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1400" height="760" viewBox="0 0 1400 760" fill="none">
+  <rect width="1400" height="760" rx="28" fill="#08111D"/>
+  <rect x="32" y="32" width="1336" height="696" rx="24" fill="#102035" stroke="#223C5C" stroke-width="2"/>
+
+  <text x="64" y="98" fill="#F3F8FF" font-family="Segoe UI, Arial, sans-serif" font-size="40" font-weight="700">
+    LumenEye AI Model Registration Guide
+  </text>
+  <text x="64" y="136" fill="#A8BCDA" font-family="Segoe UI, Arial, sans-serif" font-size="22">
+    Follow this flow inside the desktop app to create a reliable object identity model.
+  </text>
+
+  <rect x="64" y="182" width="284" height="468" rx="22" fill="#0D1A2A" stroke="#315072" stroke-width="2"/>
+  <rect x="390" y="182" width="284" height="468" rx="22" fill="#0D1A2A" stroke="#315072" stroke-width="2"/>
+  <rect x="716" y="182" width="284" height="468" rx="22" fill="#0D1A2A" stroke="#315072" stroke-width="2"/>
+  <rect x="1042" y="182" width="284" height="468" rx="22" fill="#0D1A2A" stroke="#315072" stroke-width="2"/>
+
+  <circle cx="106" cy="230" r="24" fill="#1F8F73"/>
+  <circle cx="432" cy="230" r="24" fill="#1F8F73"/>
+  <circle cx="758" cy="230" r="24" fill="#1F8F73"/>
+  <circle cx="1084" cy="230" r="24" fill="#1F8F73"/>
+
+  <text x="98" y="238" fill="#FFFFFF" font-family="Segoe UI, Arial, sans-serif" font-size="24" font-weight="700">1</text>
+  <text x="424" y="238" fill="#FFFFFF" font-family="Segoe UI, Arial, sans-serif" font-size="24" font-weight="700">2</text>
+  <text x="750" y="238" fill="#FFFFFF" font-family="Segoe UI, Arial, sans-serif" font-size="24" font-weight="700">3</text>
+  <text x="1076" y="238" fill="#FFFFFF" font-family="Segoe UI, Arial, sans-serif" font-size="24" font-weight="700">4</text>
+
+  <text x="142" y="240" fill="#F3F8FF" font-family="Segoe UI, Arial, sans-serif" font-size="28" font-weight="700">
+    Define the model
+  </text>
+  <text x="468" y="240" fill="#F3F8FF" font-family="Segoe UI, Arial, sans-serif" font-size="28" font-weight="700">
+    Freeze and select ROI
+  </text>
+  <text x="794" y="240" fill="#F3F8FF" font-family="Segoe UI, Arial, sans-serif" font-size="28" font-weight="700">
+    Save more samples
+  </text>
+  <text x="1120" y="240" fill="#F3F8FF" font-family="Segoe UI, Arial, sans-serif" font-size="28" font-weight="700">
+    Verify the result
+  </text>
+
+  <text x="90" y="300" fill="#D6E4FB" font-family="Segoe UI, Arial, sans-serif" font-size="22" font-weight="600">
+    In Model Studio:
+  </text>
+  <text x="90" y="338" fill="#A8BCDA" font-family="Segoe UI, Arial, sans-serif" font-size="20">
+    • Model Name: unique ID
+  </text>
+  <text x="90" y="372" fill="#A8BCDA" font-family="Segoe UI, Arial, sans-serif" font-size="20">
+    • Label: readable title
+  </text>
+  <text x="90" y="406" fill="#A8BCDA" font-family="Segoe UI, Arial, sans-serif" font-size="20">
+    • Category: real object type
+  </text>
+  <text x="90" y="440" fill="#A8BCDA" font-family="Segoe UI, Arial, sans-serif" font-size="20">
+    • Expected Color: optional
+  </text>
+  <rect x="90" y="488" width="230" height="54" rx="12" fill="#17314D"/>
+  <text x="116" y="522" fill="#EEF5FF" font-family="Segoe UI, Arial, sans-serif" font-size="22" font-weight="600">
+    Example: blue_bic_pen
+  </text>
+
+  <rect x="418" y="288" width="228" height="224" rx="18" fill="#0B1625" stroke="#223C5C" stroke-width="2"/>
+  <rect x="464" y="332" width="136" height="136" rx="10" fill="#152B45"/>
+  <rect x="486" y="352" width="92" height="96" rx="8" stroke="#23D18B" stroke-width="4"/>
+  <text x="450" y="548" fill="#A8BCDA" font-family="Segoe UI, Arial, sans-serif" font-size="20">
+    Draw a tight box around the object.
+  </text>
+  <text x="444" y="580" fill="#A8BCDA" font-family="Segoe UI, Arial, sans-serif" font-size="20">
+    The preview freezes while you select.
+  </text>
+  <text x="458" y="612" fill="#A8BCDA" font-family="Segoe UI, Arial, sans-serif" font-size="20">
+    Use Refresh Live to cancel and retry.
+  </text>
+
+  <text x="744" y="300" fill="#D6E4FB" font-family="Segoe UI, Arial, sans-serif" font-size="22" font-weight="600">
+    Build a stronger model:
+  </text>
+  <text x="744" y="338" fill="#A8BCDA" font-family="Segoe UI, Arial, sans-serif" font-size="20">
+    • Add Selection Sample
+  </text>
+  <text x="744" y="372" fill="#A8BCDA" font-family="Segoe UI, Arial, sans-serif" font-size="20">
+    • Add Auto Sample
+  </text>
+  <text x="744" y="406" fill="#A8BCDA" font-family="Segoe UI, Arial, sans-serif" font-size="20">
+    • Guided Capture x4
+  </text>
+  <text x="744" y="454" fill="#A8BCDA" font-family="Segoe UI, Arial, sans-serif" font-size="20">
+    Capture 4-8 views:
+  </text>
+  <text x="744" y="488" fill="#A8BCDA" font-family="Segoe UI, Arial, sans-serif" font-size="20">
+    near, mid-range, slight rotation,
+  </text>
+  <text x="744" y="520" fill="#A8BCDA" font-family="Segoe UI, Arial, sans-serif" font-size="20">
+    different tilt, front and back.
+  </text>
+  <rect x="744" y="566" width="216" height="52" rx="12" fill="#1F8F73"/>
+  <text x="772" y="599" fill="#FFFFFF" font-family="Segoe UI, Arial, sans-serif" font-size="22" font-weight="700">
+    More samples = better identity
+  </text>
+
+  <text x="1070" y="300" fill="#D6E4FB" font-family="Segoe UI, Arial, sans-serif" font-size="22" font-weight="600">
+    Check these signals:
+  </text>
+  <text x="1070" y="338" fill="#A8BCDA" font-family="Segoe UI, Arial, sans-serif" font-size="20">
+    • Saved Sample Confirmation
+  </text>
+  <text x="1070" y="372" fill="#A8BCDA" font-family="Segoe UI, Arial, sans-serif" font-size="20">
+    • Sample gallery for the model
+  </text>
+  <text x="1070" y="406" fill="#A8BCDA" font-family="Segoe UI, Arial, sans-serif" font-size="20">
+    • Detected Models in Overview
+  </text>
+  <text x="1070" y="440" fill="#A8BCDA" font-family="Segoe UI, Arial, sans-serif" font-size="20">
+    • Match and detector confidence
+  </text>
+  <text x="1070" y="488" fill="#A8BCDA" font-family="Segoe UI, Arial, sans-serif" font-size="20">
+    If the crop looks wrong,
+  </text>
+  <text x="1070" y="520" fill="#A8BCDA" font-family="Segoe UI, Arial, sans-serif" font-size="20">
+    discard it and capture again.
+  </text>
+  <rect x="1070" y="570" width="200" height="48" rx="12" fill="#17314D"/>
+  <text x="1107" y="600" fill="#EEF5FF" font-family="Segoe UI, Arial, sans-serif" font-size="22" font-weight="600">
+    Verify before demoing
+  </text>
+
+  <path d="M348 416H390" stroke="#3D6A96" stroke-width="6" stroke-linecap="round"/>
+  <path d="M674 416H716" stroke="#3D6A96" stroke-width="6" stroke-linecap="round"/>
+  <path d="M1000 416H1042" stroke="#3D6A96" stroke-width="6" stroke-linecap="round"/>
+</svg>

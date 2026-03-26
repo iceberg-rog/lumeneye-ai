@@ -329,6 +329,63 @@ class LocalTeachEngine:
             return [self.profiles[name] for name in names if name in self.profiles]
         return list(self.profiles.values())
 
+    def _passes_thresholds(self, profile, metrics, rect, frame_shape):
+        if profile.expected_color and metrics['detected_color'] != profile.expected_color:
+            return False
+        sample_count = max(1, len(profile.samples))
+        threshold_bonus = min(0.18, 0.01 * max(0, sample_count - 1))
+        orb_threshold = max(Config.ADAPTIVE_MIN_ORB_SCORE, Config.ORB_MATCH_THRESHOLD - threshold_bonus)
+        score_threshold = max(Config.ADAPTIVE_MIN_MATCH_SCORE, Config.MATCH_SCORE_THRESHOLD - threshold_bonus)
+        identity_threshold = max(Config.ADAPTIVE_MIN_IDENTITY_SCORE, 0.66 - threshold_bonus)
+        rect_area = max(1, rect[2] * rect[3])
+        frame_area = max(1, frame_shape[0] * frame_shape[1])
+        small_object = (rect_area / float(frame_area)) < 0.035
+        if small_object:
+            orb_threshold = max(Config.ADAPTIVE_MIN_ORB_SCORE, orb_threshold - 0.02)
+            score_threshold = max(Config.ADAPTIVE_MIN_MATCH_SCORE, score_threshold - 0.03)
+            identity_threshold = max(Config.ADAPTIVE_MIN_IDENTITY_SCORE, identity_threshold - 0.03)
+        if metrics['orb_score'] < orb_threshold:
+            return False
+        if metrics['identity_score'] < identity_threshold:
+            return False
+        if sample_count >= 6 and metrics.get('support_count', 0) < Config.ADAPTIVE_MULTI_SAMPLE_SUPPORT:
+            return False
+        if metrics['score'] < score_threshold:
+            return False
+        return True
+
+    def _template_search_profile(self, profile, frame, frame_gray):
+        frame_h, frame_w = frame_gray.shape[:2]
+        best = None
+        sample_pool = profile.samples[-Config.TEMPLATE_MAX_SAMPLES:]
+        for sample in sample_pool:
+            template = sample.gray
+            if template is None or template.size == 0:
+                continue
+            for scale in Config.TEMPLATE_SCALES:
+                tw = max(2, int(template.shape[1] * scale))
+                th = max(2, int(template.shape[0] * scale))
+                if min(tw, th) < Config.TEMPLATE_MIN_SIDE:
+                    continue
+                if tw >= frame_w or th >= frame_h:
+                    continue
+                resized = cv2.resize(template, (tw, th), interpolation=cv2.INTER_CUBIC if scale > 1.0 else cv2.INTER_AREA)
+                try:
+                    result = cv2.matchTemplate(frame_gray, resized, cv2.TM_CCOEFF_NORMED)
+                except cv2.error:
+                    continue
+                _, max_val, _, max_loc = cv2.minMaxLoc(result)
+                if max_val < Config.TEMPLATE_MATCH_THRESHOLD:
+                    continue
+                candidate = {
+                    'rect': (int(max_loc[0]), int(max_loc[1]), int(tw), int(th)),
+                    'confidence': float(max_val),
+                    'prompt': 'sample-search',
+                }
+                if best is None or candidate['confidence'] > best['confidence']:
+                    best = candidate
+        return best
+
     def _apply_detection(self, profile, detection, metrics, frame, bus):
         rect = clip_rect(detection['rect'], frame.shape[1], frame.shape[0])
         profile.rect = rect
@@ -417,24 +474,7 @@ class LocalTeachEngine:
                 metrics = self._score_crop(profile, crop, detection['confidence'])
                 if metrics is None:
                     continue
-                if profile.expected_color and metrics['detected_color'] != profile.expected_color:
-                    continue
-                sample_count = max(1, len(profile.samples))
-                threshold_bonus = min(0.18, 0.01 * max(0, sample_count - 1))
-                orb_threshold = max(Config.ADAPTIVE_MIN_ORB_SCORE, Config.ORB_MATCH_THRESHOLD - threshold_bonus)
-                score_threshold = max(Config.ADAPTIVE_MIN_MATCH_SCORE, Config.MATCH_SCORE_THRESHOLD - threshold_bonus)
-                identity_threshold = max(Config.ADAPTIVE_MIN_IDENTITY_SCORE, 0.66 - threshold_bonus)
-                if small_object:
-                    orb_threshold = max(Config.ADAPTIVE_MIN_ORB_SCORE, orb_threshold - 0.02)
-                    score_threshold = max(Config.ADAPTIVE_MIN_MATCH_SCORE, score_threshold - 0.03)
-                    identity_threshold = max(Config.ADAPTIVE_MIN_IDENTITY_SCORE, identity_threshold - 0.03)
-                if metrics['orb_score'] < orb_threshold:
-                    continue
-                if metrics['identity_score'] < identity_threshold:
-                    continue
-                if sample_count >= 6 and metrics.get('support_count', 0) < Config.ADAPTIVE_MULTI_SAMPLE_SUPPORT:
-                    continue
-                if metrics['score'] < score_threshold:
+                if not self._passes_thresholds(profile, metrics, rect, frame.shape):
                     continue
                 candidates.append((metrics['score'], profile.name, det_idx, metrics))
 
@@ -448,8 +488,16 @@ class LocalTeachEngine:
             used_profiles.add(profile_name)
             used_detections.add(det_idx)
 
+        frame_gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
         for name, profile in self.profiles.items():
             if name not in used_profiles:
+                fallback_detection = self._template_search_profile(profile, frame, frame_gray)
+                if fallback_detection is not None:
+                    fallback_crop = crop_rect(frame, fallback_detection['rect'])
+                    fallback_metrics = self._score_crop(profile, fallback_crop, fallback_detection['confidence'])
+                    if fallback_metrics is not None and self._passes_thresholds(profile, fallback_metrics, fallback_detection['rect'], frame.shape):
+                        self._apply_detection(profile, fallback_detection, fallback_metrics, frame, bus)
+                        continue
                 profile.lost_frames += 1
                 if profile.lost_frames <= Config.ADAPTIVE_GRACE_FRAMES and len(profile.samples) >= 6 and profile.rect[2] > 0 and profile.rect[3] > 0:
                     profile.visible = True
